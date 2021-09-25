@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 
 const Table = ({ data }) => {
@@ -11,7 +11,7 @@ const Table = ({ data }) => {
           <th scope="col">Social</th>
           <th scope="col">Governance</th>
           {/* <th scope="col">ESG Score</th> */}
-          <th scope="col">EBITDA</th>
+          <th scope="col">Crescimento médio EBITDA (últimos 3 anos)</th>
         </tr>
       </thead>
       <tbody>
@@ -23,7 +23,7 @@ const Table = ({ data }) => {
               <td>{stock.S}</td>
               <td>{stock.G}</td>
               {/* <td>{stock.score}</td> */}
-              <td>{stock.avg_ebitda_return}</td>
+              <td>{(stock.avg_ebitda_return * 100).toFixed(2)}%</td>
             </tr>
           );
         })}
@@ -33,10 +33,14 @@ const Table = ({ data }) => {
 };
 
 const SearchOptimizer = () => {
-  const [e, setE] = useState(30);
-  const [s, setS] = useState(50);
-  const [g, setG] = useState(25);
-  const [amount, setAmount] = useState(5);
+  const _e = useRef(30);
+  const _s = useRef(50);
+  const _g = useRef(25);
+  const _amount = useRef(5);
+  const [e, setE] = useState(_e.current);
+  const [s, setS] = useState(_s.current);
+  const [g, setG] = useState(_g.current);
+  const [amount, setAmount] = useState(_amount.current);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -45,13 +49,12 @@ const SearchOptimizer = () => {
     try {
       const _data = (
         await axios.post("/optimize", {
-          e,
-          s,
-          g,
-          amount,
+          e: _e.current,
+          s: _s.current,
+          g: _g.current,
+          amount: _amount.current,
         })
       ).data;
-      console.log(_data);
       setData(_data);
       setLoading(false);
     } catch (err) {
@@ -61,19 +64,27 @@ const SearchOptimizer = () => {
     }
   }, []);
 
+  const loadMoreData = () => {
+    _e.current = e;
+    _g.current = g;
+    _s.current = s;
+    _amount.current = amount;
+    loadData();
+  };
+
   useEffect(() => {
     loadData();
   }, [loadData]);
 
   return (
-    <div>
+    <div className="mt-2">
       <h4>Otimizador de Busca</h4>
       <div className="row">
         <div className="col-2 form-group">
           <label>Valor mínimo componente E:</label>
           <input
             value={e}
-            onChange={(e) => setE(e.target.value)}
+            onChange={(event) => setE(event.target.value)}
             type="number"
             className="form-control"
           ></input>
@@ -82,7 +93,7 @@ const SearchOptimizer = () => {
           <label>Valor mínimo componente S:</label>
           <input
             value={s}
-            onChange={(e) => setS(e.target.value)}
+            onChange={(event) => setS(event.target.value)}
             type="number"
             className="form-control"
           ></input>
@@ -91,7 +102,7 @@ const SearchOptimizer = () => {
           <label>Valor mínimo componente G:</label>
           <input
             value={g}
-            onChange={(e) => setG(e.target.value)}
+            onChange={(event) => setG(event.target.value)}
             type="number"
             className="form-control"
           ></input>
@@ -100,7 +111,7 @@ const SearchOptimizer = () => {
           <label>Número de Ações:</label>
           <input
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(event) => setAmount(event.target.value)}
             type="number"
             className="form-control"
           ></input>
@@ -109,9 +120,7 @@ const SearchOptimizer = () => {
           <button
             style={{ position: "absolute", bottom: 0 }}
             className="btn btn-primary w-50"
-            onClick={(e) => {
-              loadData();
-            }}
+            onClick={loadMoreData}
           >
             Otimizar Busca
           </button>

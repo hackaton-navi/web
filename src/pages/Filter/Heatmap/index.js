@@ -5,17 +5,20 @@ import axios from "axios";
 
 const HeatMap = (props) => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const colors = ["#e67e22", "#ffffff", "#3498db"];
     const loadData = async () => {
+      setLoading(true);
       try {
         let _data = (await axios.get("/stocks")).data;
         const table = createTable(_data);
         _data = loadColors(table, colors);
         setData(_data);
-        console.log(_data);
+        setLoading(false);
       } catch (err) {
+        setLoading(false);
         console.log(err);
       }
     };
@@ -67,39 +70,42 @@ const HeatMap = (props) => {
     <div>
       <h4>Heatmap por Score ESG</h4>
       <ReactTooltip />
-      <table className="table table-stripped w-auto">
-        {data.map((row) => {
-          return (
-            <tr style={{ height: size }}>
-              {row.map((col) => {
-                return (
-                  <td
-                    style={{
-                      border: "1px solid white",
-                      backgroundColor: col.color,
-                      // width: size,
-                    }}
-                    className="col-1"
-                  >
-                    <div
-                      data-tip={`Environment: ${col.E.toFixed(
-                        2
-                      )} <br>Social: ${col.S.toFixed(
-                        2
-                      )}<br>Governance: ${col.G.toFixed(2)}`}
-                      data-html={true}
-                      style={{ color: textColor }}
-                      className="text-center w-100 h-100 d-inline-flex justify-content-center align-items-center"
+      {loading && <div className="p-4 text-center">Carregando...</div>}
+      {!loading && (
+        <table className="table table-stripped w-auto">
+          {data.map((row) => {
+            return (
+              <tr style={{ height: size }}>
+                {row.map((col) => {
+                  return (
+                    <td
+                      style={{
+                        border: "1px solid white",
+                        backgroundColor: col.color,
+                        // width: size,
+                      }}
+                      className="col-1"
                     >
-                      {col.ticker} ({col.score.toFixed(2)})
-                    </div>
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
-      </table>
+                      <div
+                        data-tip={`Environment: ${col.E.toFixed(
+                          2
+                        )} <br>Social: ${col.S.toFixed(
+                          2
+                        )}<br>Governance: ${col.G.toFixed(2)}`}
+                        data-html={true}
+                        style={{ color: textColor }}
+                        className="text-center w-100 h-100 d-inline-flex justify-content-center align-items-center"
+                      >
+                        {col.ticker} ({col.score.toFixed(2)})
+                      </div>
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </table>
+      )}
     </div>
   );
 };
