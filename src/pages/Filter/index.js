@@ -44,6 +44,8 @@ const Filter = () => {
     setStocks(stocks.filter((stock) => stock.ticker !== ticker));
   };
 
+  const stockManage = { addStock, removeStock };
+
   return (
     <BasePage title="Filter Stocks">
       <div className={styles.container}>
@@ -60,14 +62,14 @@ const Filter = () => {
             id="heatmap"
             parent="accordionExample"
           >
-            <HeatMap />
+            <HeatMap stockManage={stockManage} />
           </AccordionItem>
           <AccordionItem
             title="Otimizador de Busca"
             id="optimizer"
             parent="accordionExample"
           >
-            <SearchOptimizer />
+            <SearchOptimizer stockManage={stockManage} />
           </AccordionItem>
         </div>
       </div>
