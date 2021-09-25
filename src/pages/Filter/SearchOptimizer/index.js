@@ -78,7 +78,6 @@ const SearchOptimizer = () => {
 
   return (
     <div className="mt-2">
-      <h4>Otimizador de Busca</h4>
       <div className="row">
         <div className="col-2 form-group">
           <label>Valor mínimo componente E:</label>

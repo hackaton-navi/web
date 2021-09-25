@@ -68,7 +68,6 @@ const HeatMap = (props) => {
 
   return (
     <div>
-      <h4>Heatmap por Score ESG</h4>
       <ReactTooltip />
       {loading && <div className="p-4 text-center">Carregando...</div>}
       {!loading && (
