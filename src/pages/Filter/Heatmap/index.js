@@ -3,7 +3,7 @@ import ReactTooltip from "react-tooltip";
 import interpolate from "color-interpolate";
 import axios from "axios";
 
-const HeatMap = (props) => {
+const HeatMap = ({ stockManage }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -92,7 +92,8 @@ const HeatMap = (props) => {
                           2
                         )}<br>Governance: ${col.G.toFixed(2)}`}
                         data-html={true}
-                        style={{ color: textColor }}
+                        style={{ color: textColor, cursor: "pointer" }}
+                        onClick={(e) => stockManage.addStock(col)}
                         className="text-center w-100 h-100 d-inline-flex justify-content-center align-items-center"
                       >
                         {col.ticker} ({col.score.toFixed(2)})

@@ -37,6 +37,7 @@ const Filter = () => {
   const [stocks, setStocks] = useState([]);
 
   const addStock = (stock) => {
+    alert("Ação adicionada!");
     setStocks([...stocks, stock]);
   };
 
@@ -51,11 +52,11 @@ const Filter = () => {
       <div className={styles.container}>
         <div className="accordion accordion-flush" id="accordionExample">
           <AccordionItem
-            title="Portfolio Selecionado"
+            title={`Portfolio Selecionado (${stocks.length})`}
             id="portfolio"
             parent="accordionExample"
           >
-            <Portfolio stocks={stocks} />
+            <Portfolio stocks={stocks} stockManage={stockManage} />
           </AccordionItem>
           <AccordionItem
             title="Heatmap por Score ESG"

@@ -4,6 +4,7 @@ import App from "./App";
 import axios from "axios";
 
 axios.defaults.baseURL = process.env.REACT_APP_URL || "http://127.0.0.1:5000";
+// axios.defaults.baseURL = "http://naviapi.viniciusbaca.com";
 
 ReactDOM.render(
   <React.StrictMode>

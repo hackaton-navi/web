@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 
-const Table = ({ data }) => {
+const Table = ({ data, stockManage }) => {
   return (
     <table className="table table-striped mt-3">
       <thead>
@@ -10,8 +10,10 @@ const Table = ({ data }) => {
           <th scope="col">Environment</th>
           <th scope="col">Social</th>
           <th scope="col">Governance</th>
+          <th scope="col">ESG Score</th>
           {/* <th scope="col">ESG Score</th> */}
           <th scope="col">Crescimento médio EBITDA (últimos 3 anos)</th>
+          <th scope="col">Adicionar ao portfólio</th>
         </tr>
       </thead>
       <tbody>
@@ -19,11 +21,20 @@ const Table = ({ data }) => {
           return (
             <tr>
               <td>{stock.ticker}</td>
-              <td>{stock.E}</td>
-              <td>{stock.S}</td>
-              <td>{stock.G}</td>
+              <td>{stock.E.toFixed(2)}</td>
+              <td>{stock.S.toFixed(2)}</td>
+              <td>{stock.G.toFixed(2)}</td>
+              <td>{stock.score?.toFixed(2)}</td>
               {/* <td>{stock.score}</td> */}
               <td>{(stock.avg_ebitda_return * 100).toFixed(2)}%</td>
+              <td>
+                <button
+                  onClick={(e) => stockManage.addStock(stock)}
+                  className="btn-success btn"
+                >
+                  <i className="fa fa-plus"></i>
+                </button>
+              </td>
             </tr>
           );
         })}
@@ -32,7 +43,7 @@ const Table = ({ data }) => {
   );
 };
 
-const SearchOptimizer = () => {
+const SearchOptimizer = ({ stockManage }) => {
   const _e = useRef(30);
   const _s = useRef(50);
   const _g = useRef(25);
@@ -125,7 +136,7 @@ const SearchOptimizer = () => {
           </button>
         </div>
       </div>
-      {!loading && <Table data={data} />}
+      {!loading && <Table stockManage={stockManage} data={data} />}
       {loading && <div className="p-4 text-center">Carregando...</div>}
     </div>
   );
