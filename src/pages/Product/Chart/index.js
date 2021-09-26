@@ -51,6 +51,36 @@ const Chart = ({ reportUrl, title, reverse, ticker }) => {
 
   };
 
+  const formatESGPlot = (data) => {
+    const colors = ["#f09", "#f90", "#09f", "#90f"];
+    return data.map((row, index) => {
+      const x = [];
+      const y = [];
+
+      Object.keys(row).forEach((key) => {
+        const exclusion = ["E", "S", "G", "score", "portfolio"];
+        if (exclusion.indexOf(key) < 0) {
+          x.push(key);
+          y.push(row[key]);
+        }
+      });
+
+      if (reverse) {
+        x.reverse();
+        y.reverse();
+      }
+
+      return {
+        x,
+        y,
+        type: "scatter",
+        mode: "lines+markers",
+        marker: { color: colors[index % colors.length] },
+        name: row["metric"],
+      };
+    });
+  };
+
   const loadData = React.useCallback(async () => {
     setLoading(true);
     try {
@@ -59,7 +89,13 @@ const Chart = ({ reportUrl, title, reverse, ticker }) => {
           ticker: ticker,
         })
       ).data;
-      setData(formatData(_data));
+
+      if(reportUrl == "/esg-growth") {
+        setData(formatESGPlot(_data));
+      } else {
+        setData(formatData(_data));
+      }
+
       setLoading(false);
     } catch (err) {
       setData([]);

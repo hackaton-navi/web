@@ -4,7 +4,6 @@ import interpolate from "color-interpolate";
 import Chart from "./Chart";
 import * as React from "react";
 import axios from "axios";
-import {useLocation} from "react-router-dom";
 
 const ColoredNumber = ({ number, text, className }) => {
   const [color, setColor] = useState("#fff");
@@ -26,17 +25,7 @@ const ColoredNumber = ({ number, text, className }) => {
   );
 };
 
-/*function getTickerfromURL() {
-  let query = URLSearchParams(useLocation().search);
-  return query.get("ticker");
-}*/
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
-
 const Product = ({match}) => {
-  let query = useQuery();
   const [ticker, setTicker] = useState("");
 
   const [score, setScore] = useState(0);
@@ -132,9 +121,10 @@ const Product = ({match}) => {
         {showStats()}
         <div className="row">
           <Chart
-            reportUrl="/esg-data"
+            reportUrl="/esg-growth"
             title="Evolução ESG Score"
             reverse={true}
+            ticker={match.params.ticker}
           />
         </div>
       </div>
@@ -142,7 +132,7 @@ const Product = ({match}) => {
         <div className="row">
           <Chart
             reportUrl="/historical-price"
-            title="Retorno"
+            title="Preço Histórico"
             reverse={true}
             ticker={match.params.ticker}
           />
