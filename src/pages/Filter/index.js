@@ -65,46 +65,48 @@ const Filter = () => {
           >
             <SearchOptimizer stockManage={stockManage} />
           </AccordionItem>
-          <AccordionItem
-            title="Portfólio Analytics"
-            id="portfolio-analytics"
-            parent="accordionFilter"
-          >
-            <div className="row">
-              <Renderer
-                stocks={stocks}
-                reportURL="/cumulative-return"
-                title="Retornos Acumulativos do Portfólio"
-              />
-              <Renderer
-                stocks={stocks}
-                reportURL="/sharpe-ratio"
-                title="Sharpe Ratio dos Ativos do Portfólio"
-              />
-            </div>
-            <div className="row">
-              <Renderer
-                stocks={stocks}
-                reportURL="/efficient-frontier"
-                title="Fronteira Eficiente"
-                height={500}
-              />
-              <Renderer
-                stocks={stocks}
-                reportURL="/correl-matrix"
-                title="Matriz de correlação entre os ativos"
-                height={500}
-              />
-            </div>
-            <div className="row">
-              <Renderer
-                stocks={stocks}
-                reportURL="/esg-efficient-frontier"
-                title="Fronteira Eficiente Otimizando ESG"
-                height={500}
-              />
-            </div>
-          </AccordionItem>
+          {stocks && stocks.length >= 3 && (
+            <AccordionItem
+              title="Portfólio Analytics"
+              id="portfolio-analytics"
+              parent="accordionFilter"
+            >
+              <div className="row">
+                <Renderer
+                  stocks={stocks}
+                  reportURL="/cumulative-return"
+                  title="Retornos Acumulativos do Portfólio"
+                />
+                <Renderer
+                  stocks={stocks}
+                  reportURL="/sharpe-ratio"
+                  title="Sharpe Ratio dos Ativos do Portfólio"
+                />
+              </div>
+              <div className="row">
+                <Renderer
+                  stocks={stocks}
+                  reportURL="/efficient-frontier"
+                  title="Fronteira Eficiente"
+                  height={500}
+                />
+                <Renderer
+                  stocks={stocks}
+                  reportURL="/correl-matrix"
+                  title="Matriz de correlação entre os ativos"
+                  height={500}
+                />
+              </div>
+              <div className="row">
+                <Renderer
+                  stocks={stocks}
+                  reportURL="/esg-efficient-frontier"
+                  title="Fronteira Eficiente Otimizando ESG"
+                  height={500}
+                />
+              </div>
+            </AccordionItem>
+          )}
         </div>
       </div>
     </BasePage>
