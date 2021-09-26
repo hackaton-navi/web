@@ -81,6 +81,7 @@ const Portfolio = ({ stocks, stockManage }) => {
             <th scope="col">Governance</th>
             <th scope="col">ESG Score</th>
             <th scope="col">Remover</th>
+            <th scope="col">Ver Detalhes</th>
           </tr>
         </thead>
         <tbody>
@@ -99,6 +100,12 @@ const Portfolio = ({ stocks, stockManage }) => {
                   >
                     <i className="fa fa-times text-white"></i>
                   </button>
+                </td>
+                <td>
+                  <a
+                    class="btn btn-primary"
+                    href={"/product/" + stock.ticker}
+                    role="button">Detalhes</a>
                 </td>
               </tr>
             );

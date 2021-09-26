@@ -12,7 +12,7 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/filter" component={Filter} />
           <Route exact path="/select" component={Select} />
-          <Route exact path="/product" component={Product} />
+          <Route exact path="/product/:ticker" component={Product} />
         </Switch>
       </BrowserRouter>
     </div>

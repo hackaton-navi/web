@@ -4,6 +4,7 @@ import interpolate from "color-interpolate";
 import Chart from "./Chart";
 import * as React from "react";
 import axios from "axios";
+import {useLocation} from "react-router-dom";
 
 const ColoredNumber = ({ number, text, className }) => {
   const [color, setColor] = useState("#fff");
@@ -25,8 +26,18 @@ const ColoredNumber = ({ number, text, className }) => {
   );
 };
 
-const Product = ({}) => {
-  const [ticker, setTicker] = useState("PETR4");
+/*function getTickerfromURL() {
+  let query = URLSearchParams(useLocation().search);
+  return query.get("ticker");
+}*/
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
+const Product = ({match}) => {
+  let query = useQuery();
+  const [ticker, setTicker] = useState("");
 
   const [score, setScore] = useState(0);
   const [scoreE, setScoreE] = useState(0);
@@ -35,7 +46,7 @@ const Product = ({}) => {
 
   const [loading, setLoading] = React.useState(false);
 
-  const [companyName, setCompanyName] = useState("Petrobrás");
+  const [companyName, setCompanyName] = useState("");
   const [region, setRegion] = useState("");
   const [country, setCountry] = useState("");
   const [exchange, setExchange] = useState("");
@@ -47,7 +58,7 @@ const Product = ({}) => {
     try {
       const _data = (
         await axios.post("/esg-data", {
-          ticker: ticker,
+          ticker: match.params.ticker,
         })
       ).data[0];
       formatData(_data);
@@ -59,8 +70,10 @@ const Product = ({}) => {
   }, []);
 
   React.useEffect(() => {
+    console.log(match.params.ticker);
+    //setTicker(match.params.ticker);
     loadData();
-  }, [loadData]);
+  }, [loadData, match]);
 
   const formatData = (data) => {
       setCompanyName(data.company_name);
@@ -131,7 +144,7 @@ const Product = ({}) => {
             reportUrl="/historical-price"
             title="Retorno"
             reverse={true}
-            ticker={ticker}
+            ticker={match.params.ticker}
           />
         </div>
       </div>
@@ -141,7 +154,7 @@ const Product = ({}) => {
             reportUrl="/ebitda-growth"
             title="EBITDA"
             reverse={true}
-            ticker={ticker}
+            ticker={match.params.ticker}
           />
         </div>
       </div>
