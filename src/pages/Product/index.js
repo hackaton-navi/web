@@ -1,7 +1,7 @@
 import BasePage from "../../components/BasePage";
 import { useState, useEffect } from "react";
 import interpolate from "color-interpolate";
-import Chart from "../../components/Chart";
+import Chart from "./Chart";
 import * as React from "react";
 import axios from "axios";
 
@@ -25,8 +25,8 @@ const ColoredNumber = ({ number, text, className }) => {
   );
 };
 
-const Product = ({}) => {
-  const [ticker, setTicker] = useState("PETR4");
+const Product = ({match}) => {
+  const [ticker, setTicker] = useState("");
 
   const [score, setScore] = useState(0);
   const [scoreE, setScoreE] = useState(0);
@@ -35,7 +35,7 @@ const Product = ({}) => {
 
   const [loading, setLoading] = React.useState(false);
 
-  const [companyName, setCompanyName] = useState("Petrobrás");
+  const [companyName, setCompanyName] = useState("");
   const [region, setRegion] = useState("");
   const [country, setCountry] = useState("");
   const [exchange, setExchange] = useState("");
@@ -47,7 +47,7 @@ const Product = ({}) => {
     try {
       const _data = (
         await axios.post("/esg-data", {
-          ticker: ticker,
+          ticker: match.params.ticker,
         })
       ).data[0];
       formatData(_data);
@@ -59,8 +59,10 @@ const Product = ({}) => {
   }, []);
 
   React.useEffect(() => {
+    console.log(match.params.ticker);
+    //setTicker(match.params.ticker);
     loadData();
-  }, [loadData]);
+  }, [loadData, match]);
 
   const formatData = (data) => {
       setCompanyName(data.company_name);
@@ -119,9 +121,10 @@ const Product = ({}) => {
         {showStats()}
         <div className="row">
           <Chart
-            reportUrl="/ranges-ebitda"
+            reportUrl="/esg-growth"
             title="Evolução ESG Score"
             reverse={true}
+            ticker={match.params.ticker}
           />
         </div>
       </div>
@@ -129,9 +132,9 @@ const Product = ({}) => {
         <div className="row">
           <Chart
             reportUrl="/historical-price"
-            title="Retorno"
+            title="Preço Histórico"
             reverse={true}
-            ticker={ticker}
+            ticker={match.params.ticker}
           />
         </div>
       </div>
@@ -140,8 +143,8 @@ const Product = ({}) => {
           <Chart
             reportUrl="/ebitda-growth"
             title="EBITDA"
-            reverse={false}
-            ticker={ticker}
+            reverse={true}
+            ticker={match.params.ticker}
           />
         </div>
       </div>

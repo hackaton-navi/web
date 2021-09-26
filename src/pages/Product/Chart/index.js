@@ -1,5 +1,5 @@
-import Plot from "./Plotly/Plot";
-import Slider from "./Slider";
+import Plot from "../../../components/Plotly/Plot";
+import Slider from "../../../components/Slider";
 import * as React from "react";
 import axios from "axios";
 import {
@@ -11,18 +11,7 @@ import {
 } from "@material-ui/core";
 
 const Chart = ({ reportUrl, title, reverse, ticker }) => {
-  const _value0 = React.useRef(0);
-  const _value1 = React.useRef(30);
-  const _value2 = React.useRef(60);
-  const _value3 = React.useRef(100);
-  const _metric = React.useRef("score");
   const [loading, setLoading] = React.useState(false);
-
-  const [value0, setValue0] = React.useState(_value0.current);
-  const [value1, setValue1] = React.useState(_value1.current);
-  const [value2, setValue2] = React.useState(_value2.current);
-  const [value3, setValue3] = React.useState(_value3.current);
-  const [metric, setMetric] = React.useState(_metric.current);
 
   const [data, setData] = React.useState([]);
 
@@ -34,7 +23,36 @@ const Chart = ({ reportUrl, title, reverse, ticker }) => {
   };
 
   const formatData = (data) => {
-    const colors = ["#f09", "#f90", "#09f"];
+    const x = [];
+    const y = [];
+
+    data.forEach((item) => {
+      x.push(item.DATE);
+
+      if(item[ticker] != null) {
+        y.push(item[ticker]);
+      } else {
+        y.push(item[ticker + ".SA"]);
+      }
+
+    });
+
+    if (reverse) {
+      x.reverse();
+      y.reverse();
+    }
+
+    return [{
+      x,
+      y,
+      type: "scatter",
+      mode: "lines+markers",
+    }];
+
+  };
+
+  const formatESGPlot = (data) => {
+    const colors = ["#f09", "#f90", "#09f", "#90f"];
     return data.map((row, index) => {
       const x = [];
       const y = [];
@@ -58,7 +76,7 @@ const Chart = ({ reportUrl, title, reverse, ticker }) => {
         type: "scatter",
         mode: "lines+markers",
         marker: { color: colors[index % colors.length] },
-        name: row["portfolio"],
+        name: row["metric"],
       };
     });
   };
@@ -68,15 +86,16 @@ const Chart = ({ reportUrl, title, reverse, ticker }) => {
     try {
       const _data = (
         await axios.post(reportUrl, {
-          value0: _value0.current,
-          value1: _value1.current,
-          value2: _value2.current,
-          value3: _value3.current,
-          metric: _metric.current,
           ticker: ticker,
         })
       ).data;
-      setData(formatData(_data));
+
+      if(reportUrl == "/esg-growth") {
+        setData(formatESGPlot(_data));
+      } else {
+        setData(formatData(_data));
+      }
+
       setLoading(false);
     } catch (err) {
       setData([]);
@@ -88,30 +107,6 @@ const Chart = ({ reportUrl, title, reverse, ticker }) => {
   React.useEffect(() => {
     loadData();
   }, [loadData]);
-
-  const loadMoreData = () => {
-    _value0.current = value0;
-    _value1.current = value1;
-    _value2.current = value2;
-    _value3.current = value3;
-    _metric.current = metric;
-    loadData();
-  };
-
-  const setRange0 = ([_value0, _value1]) => {
-    setValue0(_value0);
-    setValue1(_value1);
-  };
-
-  const setRange1 = ([_value1, _value2]) => {
-    setValue1(_value1);
-    setValue2(_value2);
-  };
-
-  const setRange2 = ([_value2, _value3]) => {
-    setValue2(_value2);
-    setValue3(_value3);
-  };
 
   return (
     <div className="mb-4">
