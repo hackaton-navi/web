@@ -12,7 +12,7 @@ const Home = () => {
         />
         <Chart
           reportUrl="/ranges-stock-price"
-          title="Valorização por faixa de Score"
+          title="Retorno acumulado médio por faixa de Score"
           reverse={false}
         />
       </div>

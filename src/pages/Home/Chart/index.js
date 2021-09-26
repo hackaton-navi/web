@@ -19,9 +19,9 @@ const Chart = ({ reportUrl, title, reverse }) => {
 
   const layout = {
     title: "",
-    xaxis: { title: "X AXIS" },
-    yaxis: { title: "Y AXIS" },
-    zaxis: { title: "Z AXIS" },
+    xAxis: { title: "" },
+    yAxis: { title: "" },
+    zAxis: { title: "" },
   };
 
   const formatData = (data) => {

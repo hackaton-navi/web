@@ -1,0 +1,20 @@
+.link {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  text-decoration: none;
+}
+
+.linkActive {
+  background-color: #55a4a9;
+  font-size: 20px;
+  cursor: auto;
+}
+
+.link:not(.linkActive):hover {
+  border: 3px solid #55a4a9;
+}
