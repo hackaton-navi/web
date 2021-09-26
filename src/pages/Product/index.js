@@ -1,7 +1,7 @@
 import BasePage from "../../components/BasePage";
 import { useState, useEffect } from "react";
 import interpolate from "color-interpolate";
-import Chart from "../../components/Chart";
+import Chart from "./Chart";
 import * as React from "react";
 import axios from "axios";
 
@@ -119,7 +119,7 @@ const Product = ({}) => {
         {showStats()}
         <div className="row">
           <Chart
-            reportUrl="/ranges-ebitda"
+            reportUrl="/esg-data"
             title="Evolução ESG Score"
             reverse={true}
           />
@@ -140,7 +140,7 @@ const Product = ({}) => {
           <Chart
             reportUrl="/ebitda-growth"
             title="EBITDA"
-            reverse={false}
+            reverse={true}
             ticker={ticker}
           />
         </div>
