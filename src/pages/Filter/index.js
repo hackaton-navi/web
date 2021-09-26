@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext } from "react";
 
 import styles from "./filter.module.css";
 import BasePage from "../../components/BasePage";
@@ -6,6 +6,7 @@ import HeatMap from "./Heatmap";
 import Portfolio from "./Portfolio";
 import SearchOptimizer from "./SearchOptimizer";
 import Renderer from "./PortfolioAnalytics/Renderer";
+import { PortfolioContext } from "../../App";
 
 const AccordionItem = ({ title, id, parent, children }) => {
   return (
@@ -35,21 +36,7 @@ const AccordionItem = ({ title, id, parent, children }) => {
 };
 
 const Filter = () => {
-  const [stocks, setStocks] = useState([]);
-
-  const addStock = (stock) => {
-    if (stocks.filter((_stock) => _stock.ticker === stock.ticker)?.length > 0) {
-      alert("Ação já está no portfólio.");
-      return;
-    }
-
-    alert("Ação adicionada!");
-    setStocks([...stocks, stock]);
-  };
-
-  const removeStock = (ticker) => {
-    setStocks(stocks.filter((stock) => stock.ticker !== ticker));
-  };
+  const { stocks, addStock, removeStock } = useContext(PortfolioContext);
 
   const stockManage = { addStock, removeStock };
 
@@ -106,6 +93,14 @@ const Filter = () => {
                 stocks={stocks}
                 reportURL="/correl-matrix"
                 title="Matriz de correlação entre os ativos"
+                height={500}
+              />
+            </div>
+            <div className="row">
+              <Renderer
+                stocks={stocks}
+                reportURL="/esg-efficient-frontier"
+                title="Fronteira Eficiente Otimizando ESG"
                 height={500}
               />
             </div>

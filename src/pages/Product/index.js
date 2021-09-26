@@ -1,5 +1,6 @@
 import BasePage from "../../components/BasePage";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import interpolate from "color-interpolate";
 import Chart from "./Chart";
 import * as React from "react";
@@ -25,7 +26,7 @@ const ColoredNumber = ({ number, text, className }) => {
   );
 };
 
-const Product = ({match}) => {
+const Product = ({ match }) => {
   const [ticker, setTicker] = useState("");
 
   const [score, setScore] = useState(0);
@@ -65,89 +66,111 @@ const Product = ({match}) => {
   }, [loadData, match]);
 
   const formatData = (data) => {
-      setCompanyName(data.company_name);
-      setScore(data.score);
-      setScoreE(data.E);
-      setScoreS(data.S);
-      setScoreG(data.G);
-      setRegion(data.region);
-      setCountry(data.country);
-      setExchange(data.exchange);
-      setIndustry(data.industry);
-      setTradingStatus(data.trading_status);
+    setCompanyName(data.company_name);
+    setScore(data.score);
+    setScoreE(data.E);
+    setScoreS(data.S);
+    setScoreG(data.G);
+    setRegion(data.region);
+    setCountry(data.country);
+    setExchange(data.exchange);
+    setIndustry(data.industry);
+    setTradingStatus(data.trading_status);
   };
 
   const showStats = () => {
-    if(!loading)
+    if (!loading)
       return (
-        <div className="row">
-          <p>Region: {region}</p>
-          <p>Country: {country}</p>
-          <p>Exchange: {exchange}</p>
-          <p>Industry: {industry}</p>
-          <p>Trading Status: {tradingStatus}</p>
-        </div>
+        <table className="table table-striped my-5">
+          <tbody>
+            <tr>
+              <td>Região</td>
+              <td>{region}</td>
+            </tr>
+            <tr>
+              <td>País</td>
+              <td>{country}</td>
+            </tr>
+            <tr>
+              <td>Bolsa</td>
+              <td>{exchange}</td>
+            </tr>
+            <tr>
+              <td>Setor</td>
+              <td>{industry}</td>
+            </tr>
+            <tr>
+              <td>Status de Negociação</td>
+              <td>{tradingStatus}</td>
+            </tr>
+          </tbody>
+        </table>
       );
-  }
+  };
 
   return (
     <BasePage title="Product">
-      <h3>{companyName}</h3>
+      <h3>
+        <Link to="/filter" className="mr-2">
+          <i className="fa fa-arrow-left text-white"></i>
+        </Link>{" "}
+        {companyName}
+      </h3>
       <div className="row">
-      <div className="col-4">
-        <div className="row">
-          <ColoredNumber
-            className="col-3"
-            number={score}
-            text="ESG Score"
-          ></ColoredNumber>
-          <ColoredNumber
-            className="col-3"
-            number={scoreE}
-            text="Environment Score"
-          ></ColoredNumber>
-          <ColoredNumber
-            className="col-3"
-            number={scoreS}
-            text="Social Score"
-          ></ColoredNumber>
-          <ColoredNumber
-            className="col-3"
-            number={scoreG}
-            text="Government Score"
-            color="#f09"
-          ></ColoredNumber>
+        <div className="col-4">
+          <div className="row mt-5">
+            <ColoredNumber
+              className="col-3"
+              number={score}
+              text="ESG Score"
+            ></ColoredNumber>
+            <ColoredNumber
+              className="col-3"
+              number={scoreE}
+              text="Environment Score"
+            ></ColoredNumber>
+            <ColoredNumber
+              className="col-3"
+              number={scoreS}
+              text="Social Score"
+            ></ColoredNumber>
+            <ColoredNumber
+              className="col-3"
+              number={scoreG}
+              text="Government Score"
+              color="#f09"
+            ></ColoredNumber>
+          </div>
+          {showStats()}
         </div>
-        {showStats()}
-        <div className="row">
-          <Chart
-            reportUrl="/esg-growth"
-            title="Evolução ESG Score"
-            reverse={true}
-            ticker={match.params.ticker}
-          />
+        <div className="col-4">
+          <div className="row">
+            <Chart
+              reportUrl="/historical-price"
+              title="Preço Histórico"
+              reverse={true}
+              ticker={match.params.ticker}
+            />
+          </div>
+          <div className="row">
+            <Chart
+              reportUrl="/esg-growth"
+              title="Evolução ESG Score"
+              reverse={true}
+              ticker={match.params.ticker}
+            />
+          </div>
         </div>
-      </div>
-      <div className="col-4">
-        <div className="row">
-          <Chart
-            reportUrl="/historical-price"
-            title="Preço Histórico"
-            reverse={true}
-            ticker={match.params.ticker}
-          />
+        <div className="col-4">
+          <div className="row">
+            <Chart
+              reportUrl="/ebitda-growth"
+              title="EBITDA"
+              reverse={true}
+              ticker={match.params.ticker}
+            />
+          </div>
         </div>
-      </div>
-      <div className="col-4">
-        <div className="row">
-          <Chart
-            reportUrl="/ebitda-growth"
-            title="EBITDA"
-            reverse={true}
-            ticker={match.params.ticker}
-          />
-        </div>
-      </div>
       </div>
     </BasePage>
   );

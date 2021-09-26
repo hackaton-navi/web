@@ -9,8 +9,11 @@ import {
   FormControlLabel,
   Radio,
 } from "@material-ui/core";
+import { PortfolioContext } from "../../../App";
 
 const Chart = ({ reportUrl, title, reverse }) => {
+  const { stocks } = React.useContext(PortfolioContext);
+
   const _value0 = React.useRef(0);
   const _value1 = React.useRef(30);
   const _value2 = React.useRef(60);
@@ -43,7 +46,7 @@ const Chart = ({ reportUrl, title, reverse }) => {
   };
 
   const formatData = (data) => {
-    const colors = ["#f09", "#f90", "#09f"];
+    const colors = ["#2ecc71", "#f09", "#f90", "#09f"];
     return data.map((row, index) => {
       const x = [];
       const y = [];
@@ -85,6 +88,7 @@ const Chart = ({ reportUrl, title, reverse }) => {
           sector: _sector.current,
           mc_cohort1: _mc_cohort1.current,
           mc_cohort2: _mc_cohort2.current,
+          stocks: stocks.map((stock) => stock.ticker),
         })
       ).data;
       setData(formatData(_data));
@@ -94,7 +98,7 @@ const Chart = ({ reportUrl, title, reverse }) => {
       setLoading(false);
       console.log(err);
     }
-  }, []);
+  }, [stocks]);
 
   React.useEffect(() => {
     const loadSectors = async () => {

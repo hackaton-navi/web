@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import interpolate from "color-interpolate";
 
 const ColoredNumber = ({ number, text, className }) => {
@@ -102,10 +103,12 @@ const Portfolio = ({ stocks, stockManage }) => {
                   </button>
                 </td>
                 <td>
-                  <a
-                    class="btn btn-primary"
-                    href={"/product/" + stock.ticker}
-                    role="button">Detalhes</a>
+                  <Link
+                    className="btn btn-primary"
+                    to={`/product/${stock.ticker}`}
+                  >
+                    Detalhes
+                  </Link>
                 </td>
               </tr>
             );

@@ -81,9 +81,11 @@ const HeatMap = ({ stockManage }) => {
                       style={{
                         border: "1px solid white",
                         backgroundColor: col.color,
+                        cursor: "pointer",
                         // width: size,
                       }}
                       className="col-1"
+                      onClick={(e) => stockManage.addStock(col)}
                     >
                       <div
                         data-tip={`Environment: ${col.E.toFixed(
@@ -92,8 +94,7 @@ const HeatMap = ({ stockManage }) => {
                           2
                         )}<br>Governance: ${col.G.toFixed(2)}`}
                         data-html={true}
-                        style={{ color: textColor, cursor: "pointer" }}
-                        onClick={(e) => stockManage.addStock(col)}
+                        style={{ color: textColor }}
                         className="text-center w-100 h-100 d-inline-flex justify-content-center align-items-center"
                       >
                         {col.ticker} ({col.score.toFixed(2)})
