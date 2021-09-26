@@ -37,6 +37,11 @@ const Filter = () => {
   const [stocks, setStocks] = useState([]);
 
   const addStock = (stock) => {
+    if (stocks.filter((_stock) => _stock.ticker === stock.ticker)?.length > 0) {
+      alert("Ação já está no portfólio.");
+      return;
+    }
+
     alert("Ação adicionada!");
     setStocks([...stocks, stock]);
   };
