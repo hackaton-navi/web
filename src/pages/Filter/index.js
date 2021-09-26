@@ -98,13 +98,15 @@ const Filter = () => {
             <div className="row">
               <Renderer
                 stocks={stocks}
-                reportURL="/scatter-chart"
-                title="Scatter Chart"
+                reportURL="/efficient-frontier"
+                title="Fronteira Eficiente"
+                height={500}
               />
               <Renderer
                 stocks={stocks}
-                reportURL="/max-sharpe-chart"
-                title="Sharpe Ratio máximo"
+                reportURL="/correl-matrix"
+                title="Matriz de correlação entre os ativos"
+                height={500}
               />
             </div>
           </AccordionItem>

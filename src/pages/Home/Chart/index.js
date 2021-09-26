@@ -16,6 +16,10 @@ const Chart = ({ reportUrl, title, reverse }) => {
   const _value2 = React.useRef(60);
   const _value3 = React.useRef(100);
   const _metric = React.useRef("score");
+  const _sector = React.useRef("Todos");
+  const _mc_cohort1 = React.useRef(0);
+  const _mc_cohort2 = React.useRef(100);
+
   const [loading, setLoading] = React.useState(false);
 
   const [value0, setValue0] = React.useState(_value0.current);
@@ -23,6 +27,11 @@ const Chart = ({ reportUrl, title, reverse }) => {
   const [value2, setValue2] = React.useState(_value2.current);
   const [value3, setValue3] = React.useState(_value3.current);
   const [metric, setMetric] = React.useState(_metric.current);
+  const [sector, setSector] = React.useState(_sector.current);
+  const [mc_cohort1, setMcCohort1] = React.useState(_mc_cohort1.current);
+  const [mc_cohort2, setMcCohort2] = React.useState(_mc_cohort2.current);
+
+  const [sectors, setSectors] = React.useState([]);
 
   const [data, setData] = React.useState([]);
 
@@ -73,6 +82,9 @@ const Chart = ({ reportUrl, title, reverse }) => {
           value2: _value2.current,
           value3: _value3.current,
           metric: _metric.current,
+          sector: _sector.current,
+          mc_cohort1: _mc_cohort1.current,
+          mc_cohort2: _mc_cohort2.current,
         })
       ).data;
       setData(formatData(_data));
@@ -85,6 +97,18 @@ const Chart = ({ reportUrl, title, reverse }) => {
   }, []);
 
   React.useEffect(() => {
+    const loadSectors = async () => {
+      try {
+        const data = (await axios.get("/sectors")).data;
+        setSectors(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    loadSectors();
+  }, []);
+
+  React.useEffect(() => {
     loadData();
   }, [loadData]);
 
@@ -94,6 +118,9 @@ const Chart = ({ reportUrl, title, reverse }) => {
     _value2.current = value2;
     _value3.current = value3;
     _metric.current = metric;
+    _sector.current = sector;
+    _mc_cohort1.current = mc_cohort1;
+    _mc_cohort2.current = mc_cohort2;
     loadData();
   };
 
@@ -110,6 +137,11 @@ const Chart = ({ reportUrl, title, reverse }) => {
   const setRange2 = ([_value2, _value3]) => {
     setValue2(_value2);
     setValue3(_value3);
+  };
+
+  const setMcCohorts = ([_value1, _value2]) => {
+    setMcCohort1(_value1);
+    setMcCohort2(_value2);
   };
 
   return (
@@ -133,36 +165,57 @@ const Chart = ({ reportUrl, title, reverse }) => {
         </div>
       )}
       <div className="row">
-        <FormControl component="fieldset">
-          <FormLabel component="legend" style={{ color: "white" }}>
-            Métrica
-          </FormLabel>
-          <RadioGroup
-            row
-            aria-label="metric"
-            defaultValue="score"
-            name="radio-buttons-group"
-            value={metric}
-            onChange={(event) => setMetric(event.target.value)}
+        <div className="col-6">
+          <FormControl component="fieldset">
+            <FormLabel component="legend" style={{ color: "white" }}>
+              Métrica
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-label="metric"
+              defaultValue="score"
+              name="radio-buttons-group"
+              value={metric}
+              onChange={(event) => setMetric(event.target.value)}
+            >
+              <FormControlLabel
+                value="score"
+                control={<Radio />}
+                label="ESG Score"
+              />
+              <FormControlLabel
+                value="E"
+                control={<Radio />}
+                label="Environment"
+              />
+              <FormControlLabel value="S" control={<Radio />} label="Social" />
+              <FormControlLabel
+                value="G"
+                control={<Radio />}
+                label="Government"
+              />
+            </RadioGroup>
+          </FormControl>
+        </div>
+        <div className="col-2 form-group">
+          <label>Setor: </label>
+          <select
+            value={sector}
+            onChange={(event) => setSector(event.target.value)}
+            className="form-control"
           >
-            <FormControlLabel
-              value="score"
-              control={<Radio />}
-              label="ESG Score"
-            />
-            <FormControlLabel
-              value="E"
-              control={<Radio />}
-              label="Environment"
-            />
-            <FormControlLabel value="S" control={<Radio />} label="Social" />
-            <FormControlLabel
-              value="G"
-              control={<Radio />}
-              label="Government"
-            />
-          </RadioGroup>
-        </FormControl>
+            <option>Todos</option>
+            {sectors.map((sector) => (
+              <option value={sector.industry}>
+                {sector.industry} ({sector.amount})
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col-3">
+          <p>Cortes de Market Cap</p>
+          <Slider value={[mc_cohort1, mc_cohort2]} setValue={setMcCohorts} />
+        </div>
       </div>
       <div className="row">
         <div className="col-3">

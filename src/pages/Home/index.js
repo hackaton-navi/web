@@ -19,8 +19,8 @@ const Home = () => {
       <hr />
       <div className="row">
         <Chart
-          reportUrl="/ranges-ebitda"
-          title="Crescimento de EBITDA médio por faixa de Score"
+          reportUrl="/ranges-pe-ratio"
+          title="PE ratio médio por faixa de Score"
           reverse={true}
         />
         <Chart

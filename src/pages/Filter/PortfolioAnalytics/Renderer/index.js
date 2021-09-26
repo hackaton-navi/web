@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const Renderer = ({ stocks, reportURL, title }) => {
+const Renderer = ({ stocks, reportURL, title, height }) => {
   const [html, setHtml] = useState("");
   const [loading, setLoading] = useState("");
 
@@ -34,7 +34,7 @@ const Renderer = ({ stocks, reportURL, title }) => {
         <div
           style={{
             width: "100%",
-            height: 400,
+            height: height || 400,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -45,7 +45,7 @@ const Renderer = ({ stocks, reportURL, title }) => {
       )}
       {!loading && (
         <iframe
-          style={{ width: "100%", height: 400 }}
+          style={{ width: "100%", height: height || 400 }}
           title={title}
           srcdoc={html}
         ></iframe>
