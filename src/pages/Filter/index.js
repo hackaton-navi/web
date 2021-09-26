@@ -5,6 +5,7 @@ import BasePage from "../../components/BasePage";
 import HeatMap from "./Heatmap";
 import Portfolio from "./Portfolio";
 import SearchOptimizer from "./SearchOptimizer";
+import Renderer from "./PortfolioAnalytics/Renderer";
 
 const AccordionItem = ({ title, id, parent, children }) => {
   return (
@@ -55,27 +56,57 @@ const Filter = () => {
   return (
     <BasePage title="Filter Stocks">
       <div className={styles.container}>
-        <div className="accordion accordion-flush" id="accordionExample">
+        <div className="accordion accordion-flush" id="accordionFilter">
           <AccordionItem
             title={`Portfolio Selecionado (${stocks.length})`}
             id="portfolio"
-            parent="accordionExample"
+            parent="accordionFilter"
           >
             <Portfolio stocks={stocks} stockManage={stockManage} />
           </AccordionItem>
           <AccordionItem
             title="Heatmap por Score ESG"
             id="heatmap"
-            parent="accordionExample"
+            parent="accordionFilter"
           >
             <HeatMap stockManage={stockManage} />
           </AccordionItem>
           <AccordionItem
             title="Otimizador de Busca"
             id="optimizer"
-            parent="accordionExample"
+            parent="accordionFilter"
           >
             <SearchOptimizer stockManage={stockManage} />
+          </AccordionItem>
+          <AccordionItem
+            title="Portfólio Analytics"
+            id="portfolio-analytics"
+            parent="accordionFilter"
+          >
+            <div className="row">
+              <Renderer
+                stocks={stocks}
+                reportURL="/cumulative-return"
+                title="Retornos Acumulativos do Portfólio"
+              />
+              <Renderer
+                stocks={stocks}
+                reportURL="/sharpe-ratio"
+                title="Sharpe Ratio dos Ativos do Portfólio"
+              />
+            </div>
+            <div className="row">
+              <Renderer
+                stocks={stocks}
+                reportURL="/scatter-chart"
+                title="Scatter Chart"
+              />
+              <Renderer
+                stocks={stocks}
+                reportURL="/max-sharpe-chart"
+                title="Sharpe Ratio máximo"
+              />
+            </div>
           </AccordionItem>
         </div>
       </div>
