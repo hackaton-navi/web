@@ -16,6 +16,7 @@ const Home = () => {
           reverse={false}
         />
       </div>
+      <hr />
       <div className="row">
         <Chart
           reportUrl="/ranges-ebitda"

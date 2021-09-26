@@ -2,18 +2,27 @@ import Plot from "../../../components/Plotly/Plot";
 import Slider from "../../../components/Slider";
 import * as React from "react";
 import axios from "axios";
+import {
+  RadioGroup,
+  FormControl,
+  FormLabel,
+  FormControlLabel,
+  Radio,
+} from "@material-ui/core";
 
 const Chart = ({ reportUrl, title, reverse }) => {
   const _value0 = React.useRef(0);
   const _value1 = React.useRef(30);
   const _value2 = React.useRef(60);
   const _value3 = React.useRef(100);
+  const _metric = React.useRef("score");
   const [loading, setLoading] = React.useState(false);
 
   const [value0, setValue0] = React.useState(_value0.current);
   const [value1, setValue1] = React.useState(_value1.current);
   const [value2, setValue2] = React.useState(_value2.current);
   const [value3, setValue3] = React.useState(_value3.current);
+  const [metric, setMetric] = React.useState(_metric.current);
 
   const [data, setData] = React.useState([]);
 
@@ -63,6 +72,7 @@ const Chart = ({ reportUrl, title, reverse }) => {
           value1: _value1.current,
           value2: _value2.current,
           value3: _value3.current,
+          metric: _metric.current,
         })
       ).data;
       setData(formatData(_data));
@@ -83,6 +93,7 @@ const Chart = ({ reportUrl, title, reverse }) => {
     _value1.current = value1;
     _value2.current = value2;
     _value3.current = value3;
+    _metric.current = metric;
     loadData();
   };
 
@@ -102,8 +113,9 @@ const Chart = ({ reportUrl, title, reverse }) => {
   };
 
   return (
-    <div className="col-6">
+    <div className="col-6 mb-4">
       <h3>{title}</h3>
+
       {!loading && (
         <Plot style={{ width: "100%" }} data={data} layout={layout} />
       )}
@@ -120,6 +132,38 @@ const Chart = ({ reportUrl, title, reverse }) => {
           Carregando...
         </div>
       )}
+      <div className="row">
+        <FormControl component="fieldset">
+          <FormLabel component="legend" style={{ color: "white" }}>
+            Métrica
+          </FormLabel>
+          <RadioGroup
+            row
+            aria-label="metric"
+            defaultValue="score"
+            name="radio-buttons-group"
+            value={metric}
+            onChange={(event) => setMetric(event.target.value)}
+          >
+            <FormControlLabel
+              value="score"
+              control={<Radio />}
+              label="ESG Score"
+            />
+            <FormControlLabel
+              value="E"
+              control={<Radio />}
+              label="Environment"
+            />
+            <FormControlLabel value="S" control={<Radio />} label="Social" />
+            <FormControlLabel
+              value="G"
+              control={<Radio />}
+              label="Government"
+            />
+          </RadioGroup>
+        </FormControl>
+      </div>
       <div className="row">
         <div className="col-3">
           <p>Menores Scores</p>
