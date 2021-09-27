@@ -1,5 +1,7 @@
 ## ESG Monitor - Numbers Doing Trade
 
+- [navi.viniciusbaca.com](http://navi.viniciusbaca.com/)
+
 Enrico Robazza
 
 Érico Faustino
@@ -7,8 +9,6 @@ Enrico Robazza
 Luca Bottino
 
 Vinícius Baca
-
-navi.viniciusbaca.com
 
 Projeto desenvolvido para o Hackathon Navi 2021
 
