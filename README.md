@@ -6,8 +6,8 @@ Enrico Robazza
 
 Luca Bottino
 
-Vinícius Bacca
+Vinícius Baca
 
-http://navi.viniciusbaca.com/
+navi.viniciusbaca.com
 
 Projeto desenvolvido para o Hackathon Navi 2021
